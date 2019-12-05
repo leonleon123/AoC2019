@@ -10,26 +10,21 @@ def run(line):
         operands = [program[i+x+1] if modes[x] else program[program[i+x+1]] for x in range(num_of_operands[instruction])]
         if instruction == 1:
             program[program[i+3]] = operands[0] + operands[1]
-            i += 4
         elif instruction == 2:
             program[program[i+3]] = operands[0] * operands[1]
-            i += 4
         elif instruction == 3:
-            program[program[i+1]] = int(input("input"))
-            i += 2
+            program[program[i+1]] = int(input("input: "))
         elif instruction == 4:
             print(operands[0])
-            i += 2
         elif instruction == 5:
-            i = operands[1] if operands[0]!=0 else (i + 3)
+            i = (operands[1] - 3) if operands[0]!=0 else i
         elif instruction == 6:
-            i = operands[1] if operands[0]==0 else (i + 3)
+            i = (operands[1] - 3) if operands[0]==0 else i
         elif instruction == 7:
             program[program[i+3]] = int(operands[0] < operands[1])
-            i += 4
         elif instruction == 8:
             program[program[i+3]] = int(operands[0] == operands[1])
-            i += 4
+        i += num_of_operands[instruction] + 1
     return program
 with open("input3.txt") as file:
     run(file.readline().split(","))
