@@ -14,7 +14,7 @@ def run(program, inputs, pc):
             program[program[i+1]] = inputs[input_idx]
             input_idx+=1
         elif instruction == 4:
-            return {"output":operands[0], "pc":i+2}
+            return (operands[0], i+2)
         elif instruction == 5:
             i = (operands[1] - 3) if operands[0]!=0 else i
         elif instruction == 6:
@@ -24,29 +24,29 @@ def run(program, inputs, pc):
         elif instruction == 8:
             program[program[i+3]] = int(operands[0] == operands[1])
         i += num_of_operands[instruction] + 1
-    return False
+    return [False,False]
 
 def set_sequence(line, settings, feedback):
     prev = 0
     program = [int(x) for x in line]
-    amplifiers = [{"program":program.copy(),"pc":0} for _ in range(5)]
+    amplifiers = [[program.copy(),0] for _ in range(5)]
     for i in range(5):
-        tmp = run((amplifiers[i])["program"], [settings[i],prev], (amplifiers[i])["pc"])
-        prev = tmp["output"]
-        (amplifiers[i])["pc"] = tmp["pc"]
+        output, pc = run(amplifiers[i][0], [settings[i],prev], amplifiers[i][1])
+        prev = output
+        amplifiers[i][1] = pc
     if not feedback: return prev
     i = 0
     while True:
-        tmp = run((amplifiers[i])["program"], [prev], (amplifiers[i])["pc"])
-        if tmp == False: break
-        prev = tmp["output"]
-        (amplifiers[i])["pc"] = tmp["pc"]
+        output, pc = run(amplifiers[i][0], [prev], amplifiers[i][1])
+        if output == False: break
+        prev = output
+        amplifiers[i][1] = pc
         i = (i+1)%5
     return prev
 
 def permute(arr, tmp, res, index):
     if index >= len(tmp):
-        res.append(tmp.copy())
+        return res.append(tmp.copy())
     for i in range(len(arr)):
         tmp[index] = arr[i]
         permute(arr[:i]+arr[i+1:], tmp, res, index+1)
