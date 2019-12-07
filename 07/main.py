@@ -26,7 +26,7 @@ def run(program, inputs, pc):
         i += num_of_operands[instruction] + 1
     return False
 
-def set_sequence(line, settings):
+def set_sequence(line, settings, feedback):
     prev = 0
     program = [int(x) for x in line]
     amplifiers = [{"program":program.copy(),"pc":0} for _ in range(5)]
@@ -34,6 +34,7 @@ def set_sequence(line, settings):
         tmp = run((amplifiers[i])["program"], [settings[i],prev], (amplifiers[i])["pc"])
         prev = tmp["output"]
         (amplifiers[i])["pc"] = tmp["pc"]
+    if not feedback: return prev
     i = 0
     while True:
         tmp = run((amplifiers[i])["program"], [prev], (amplifiers[i])["pc"])
@@ -52,7 +53,8 @@ def permute(arr, tmp, res, index):
 
 with open("input1.txt") as file:
     line = file.readline().split(",")
-    res = []
-    # permute(list(range(5)), list(range(5)), res, 0)
-    permute(list(range(5,10)), list(range(5,10)), res, 0)
-    print(max(set_sequence(line, per) for per in res))
+    res1, res2 = [], []
+    permute(list(range(5)), list(range(5)), res1, 0)
+    permute(list(range(5,10)), list(range(5,10)), res2, 0)
+    print(max(set_sequence(line, per, False) for per in res1))
+    print(max(set_sequence(line, per, True) for per in res2))
