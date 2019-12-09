@@ -1,8 +1,7 @@
 def run(line):
     num_of_operands = [0, 3, 3, 1, 1, 2, 2, 3, 3, 1]
     program = [int(x) for x in line]+[0]*10000
-    i = 0
-    base = 0
+    i, base = 0, 0
     while program[i] != 99:
         modes = [int(x) for x in f"{program[i]:0>5}"[:3]][::-1]
         instruction = int(f"{program[i]:0>5}"[3:])
