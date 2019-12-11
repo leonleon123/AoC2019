@@ -38,7 +38,7 @@ with open("input1.txt") as file:
     data = file.readline().split(",")
     print(len(run(data,0)))
     result = run(data, 1)
-    tmp = [["."]*50 for _ in range(7)]
+    tmp = [[" "]*50 for _ in range(7)]
     for i in zip(result.keys(), result.values()):
-        tmp[i[0][0]][i[0][1]] = "#" if i[1] else "."
+        tmp[i[0][0]][i[0][1]] = "#" if i[1] else " "
     [print(" ".join(x), end="\n") for x in tmp]
