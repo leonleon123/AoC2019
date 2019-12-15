@@ -34,14 +34,12 @@ def run(program, move, pos, pc, field):
 def find_path(x, y, length, field):
     if field[x][y] == "▒" or field[x][y] == "W": return (0,0,0) if field[x][y] == "▒" else (x,y,length)
     field[x][y] = "▒"
-    tmp = sorted([find_path(x+d[0], y+d[1], length+1, field) for d in ((-1, 0), (1,0), (0,-1), (0,1))], key = lambda x: abs(x[0]) + abs(x[1]))
-    return (0,0,0) if len(tmp) == 0 else tmp[-1]
+    return max([find_path(x+d[0], y+d[1], length+1, field) for d in ((-1, 0), (1,0), (0,-1), (0,1))], key = lambda x: abs(x[0]) + abs(x[1]))
 def distance(x1,y1,x2,y2,length,field):
     if field[x1][y1] == "▒": return 0
     if x1 == x2 and y1 == y2: return length
     field[x1][y1] = "▒"
-    tmp = sorted([distance(x1+d[0], y1+d[1], x2, y2, length+1, field) for d in ((-1, 0), (1,0), (0,-1), (0,1))])
-    return 0 if len(tmp) == 0 else tmp[-1]
+    return max([distance(x1+d[0], y1+d[1], x2, y2, length+1, field) for d in ((-1, 0), (1,0), (0,-1), (0,1))])
 with open("input1.txt") as file:
     program = [int(x) for x in file.readline().split(",")]+[0]*10000
     field, start = [[" "]*41 for _ in range(41)], [21,21]
